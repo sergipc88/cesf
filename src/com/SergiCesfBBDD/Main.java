@@ -22,7 +22,7 @@ public class Main {
 			System.out.println("2.baja");
 			System.out.println("3.modificacion");
 			System.out.println("4.consulta");
-			System.out.println("5.comprobación");
+			System.out.println("5.consultar alumno");
 			System.out.println(" ");
 			System.out.println("elije opcion");
 			opt = lector.nextInt();
@@ -33,7 +33,7 @@ public class Main {
 	}
 
 	// en el metodo eleccion se hace una cosa u otra dependiendo lo que haya elegido
-	// el usuario
+	// // el usuario
 	public void eleccion(int opt) {
 		Mantenimiento man = new Mantenimiento();
 		String nombre;
@@ -51,7 +51,7 @@ public class Main {
 			nombre = lector.next();
 			System.out.println("introduce la edad");
 			edad = lector.nextInt();
-			System.out.println("insertando ...");		
+			System.out.println("insertando ...");
 			darDeAlta(nombre, dni, edad);
 			System.out.println(" ");
 			break;
@@ -75,11 +75,11 @@ public class Main {
 			recuperacion(alumnos); // se la pasamos al metodo recuperacion
 			System.out.println(" ");
 			break;
-		case 5:// comprobacion
+		case 5:// consultar alumno
 			System.out.println("introduce el dni");
 			dni = lector.next();
 			System.out.println("Comprobando...");
-			man.comprobacion(dni);
+			consultaAlumno(dni);
 		default:
 			break;
 		}
@@ -99,13 +99,22 @@ public class Main {
 		Mantenimiento man = new Mantenimiento();
 
 		if (man.insertar(a, b, c) == true) {
+			System.out.println("error al hacer el alta");
 
-			System.out.println("el Alumno " + b + " ya exito");
+			System.out.println("el Alumno " + b + " ya existe");
 
 		} else {
-			System.out.println("Alumno " + a + " dado de alta con existe");
+			System.out.println("Alumno " + a + " dado de alta con exito");
 		}
 
+	}
+
+	public void consultaAlumno(String dni) {
+		Mantenimiento man = new Mantenimiento();
+		Alumno al = man.consultaEspecifica(dni);
+		System.out.println(" ");
+		System.out.println(al.getNombre() + " " + al.getDni() + " " + al.getEdad());
+		System.out.println(" ");
 	}
 
 }
