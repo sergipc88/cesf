@@ -5,7 +5,6 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,9 +20,6 @@ public class Mantenimiento {
 			
 			try {
 				conn = getConnection();
-//				Statement statement = conn.createStatement();
-//				statement.executeUpdate("INSERT INTO prueva VALUES(null,'"+a+"','"+b+"','"+c+"')");
-//				statement.close();	
 				PreparedStatement pstmt = conn.prepareStatement("INSERT INTO prueva VALUES (?,?,?,?)");
 				pstmt.setString(1, null);
 				pstmt.setString(2, a);
@@ -51,7 +47,7 @@ public class Mantenimiento {
 		Connection conn;
 		try {
 			conn = getConnection();
-			Statement statement = conn.createStatement();
+//			Statement statement = conn.createStatement();
 //			System.out.println(statement.executeUpdate("DELETE FROM prueva  WHERE dni='"+del+"'"));  
 //			statement.executeUpdate("DELETE FROM prueva  WHERE dni="+"'del'");
 //			statement.close();	
@@ -75,9 +71,12 @@ public class Mantenimiento {
 		Connection conn;
 		try {
 			conn = getConnection();
-			Statement statement = conn.createStatement();			 
-			statement.executeUpdate("UPDATE prueva SET nombre='"+nombre+"', edad ="+edad+" WHERE dni = '"+mod+"'");
-			statement.close();			
+			PreparedStatement pstmt = conn.prepareStatement("UPDATE prueva SET nombre=?, edad = ? WHERE dni = ?");
+			pstmt.setString(1, nombre);
+			pstmt.setInt(2, edad);
+			pstmt.setString(3,mod );
+			pstmt.execute();
+			pstmt.close();			
 			conn.close();			
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -93,9 +92,9 @@ public class Mantenimiento {
 		Connection conn;
 		List<Alumno>alumnos = new ArrayList<>();
 		try {
-			conn = getConnection();
-			Statement statement = conn.createStatement();		 
-			ResultSet personas = statement.executeQuery("SELECT * FROM prueva");
+			conn = getConnection();	
+			PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM prueva");
+			ResultSet personas = pstmt.executeQuery();
 			while (personas.next()){
 				Alumno al = new Alumno();
 				al.setNombre(personas.getString("nombre"));
@@ -105,7 +104,11 @@ public class Mantenimiento {
 				alumnos.add(al);
 				
 			}
-			statement.close();		
+			pstmt.close();	
+			
+			
+			
+			
 			conn.close();			
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -123,11 +126,12 @@ public class Mantenimiento {
 		Connection conn;
 		try {
 			conn = getConnection();
-			Statement statement = conn.createStatement();		 
-			ResultSet personas = statement.executeQuery("SELECT * FROM prueva where dni ='"+dni+"'");
-			//System.out.println(personas.next());
+			PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM prueva where dni = ?");
+			pstmt.setString(1, dni);
+			ResultSet personas = pstmt.executeQuery();
 			bok = personas.next();
-			statement.close();		
+			pstmt.close();			
+
 			conn.close();			
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
